@@ -1,0 +1,31 @@
+{
+  "name": "nutri-track",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "node-sass-chokidar": "^1.2.1",
+    "npm-run-all": "^4.1.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.1"
+  },
+  "scripts": {
+    "frontend": "run-p start-js watch-scss",
+    "start:dev": "run-p start-js watch-scss backend-dev",
+    "start-js": "react-scripts start",
+    "build-be": "rimraf ./dist/server && babel ./server --out-dir ./dist/server",
+    "build-fe": "react-scripts build",
+    "build-scss": "node-sass-chokidar ./src/ -o ./src",
+    "backend-dev": "nodemon ./server/index.js --exec babel-node --presets env",
+    "watch-scss": "npm run build-scss && node-sass-chokidar ./src/ -o ./scr/ --watch --recursive",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "start": "NODE_ENV=production && node ./dist/server/index.js"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.6.1",
+    "nodemon": "^1.17.2",
+    "rimraf": "^2.6.2"
+  }
+}
