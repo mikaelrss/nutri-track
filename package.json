@@ -13,6 +13,7 @@
     "http": "^0.0.0",
     "node-sass-chokidar": "^1.2.1",
     "npm-run-all": "^4.1.2",
+    "path": "^0.12.7",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1",
