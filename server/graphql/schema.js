@@ -1,34 +1,26 @@
-import { PubSub, withFilter } from "graphql-subscriptions";
-const pubSub = new PubSub();
+import { buildSchema } from 'graphql';
+import { makeExecutableSchema } from 'graphql-tools';
+import resolvers from './resolvers';
 
-const HIGHSCORE_BEATEN = "highscore_beaten";
-
-const rootResolver = {
-  Query: {
-    version: () => {
-      return process.env.npm_package_version;
-    }
-  },
-
-  Mutation: {
-    addHighscore: (proxy, data) => {
-      pubSub.publish(HIGHSCORE_BEATEN, {
-        highscoreWasBeaten: { user: data.user, score: data.score }
-      });
-      return data;
-    }
-  },
-
-  Subscription: {
-    highscoreWasBeaten: {
-      subscribe: withFilter(
-        () => pubSub.asyncIterator(HIGHSCORE_BEATEN),
-        (payload, variables) => {
-          return payload.highscoreWasBeaten.score > variables.score;
-        }
-      )
-    }
+const typeDefs = `
+  type Query {
+    version: String!
   }
-};
+  type Mutation {
+    addHighscore(user: String! score: Int): Highscore!
+  }
 
-export default rootResolver;
+  type Highscore {
+    score: Int,
+    user: String,
+  }
+
+  type Subscription {
+    highscoreWasBeaten(score: Int!): Highscore
+  }
+`;
+
+export default makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
